@@ -134,3 +134,7 @@ ubuntu@lab:~/secure-docker-python-production-template$ bash security/trivy-scan.
 What Trivy detects:
 
 OS-level CVEs, Python dependency vulnerabilities, Misconfigurations, Secrets
+
+## 📜 **License**
+
+This project is licensed under the MIT License.
