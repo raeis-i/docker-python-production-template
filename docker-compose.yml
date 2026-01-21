@@ -1,0 +1,35 @@
+services:
+  dev:
+    image: docker-prod-image-dev:v1.0.0
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.dev
+    environment:
+      - ENV=dev
+    ports:
+      - "8081:8080"
+
+  staging:
+    image: docker-prod-image-staging:v1.0.0  
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.staging
+    environment:
+      - ENV=staging
+    ports:
+      - "8082:8080"
+
+  prod:
+    image: docker-prod-image-prod:v1.0.0  
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.prod
+    environment:
+      - ENV=prod
+    ports:
+      - "8083:8080"
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL

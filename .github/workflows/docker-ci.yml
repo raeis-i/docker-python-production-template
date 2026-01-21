@@ -1,0 +1,22 @@
+name: Docker CI
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build production image
+        run: docker build -f docker/Dockerfile.prod -t app:prod .
+
+      - name: Trivy vulnerability scan (non-blocking)
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          image-ref: app:prod
+          severity: CRITICAL,HIGH
+          exit-code: 0 # For testing purposes, do not fail the build

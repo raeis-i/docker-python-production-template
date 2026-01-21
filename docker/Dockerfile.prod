@@ -1,0 +1,17 @@
+#Build Stage
+FROM python:3.12 AS build
+WORKDIR /build
+COPY app/requirements.txt .
+RUN pip install --target=/install -r requirements.txt
+COPY app/ .
+
+#Runtime Stage
+FROM python:3.12-slim
+WORKDIR /app
+COPY --from=build /install /usr/local/lib/python3.12/site-packages
+COPY --from=build /build/main.py .
+USER 65532:65532
+EXPOSE 8080
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD ["python3", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health')"]
+ENTRYPOINT ["python3", "main.py"]
